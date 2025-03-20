@@ -1,0 +1,19 @@
+--- include/linux/console.h
++++ include/linux/console.h
+@@ -158,6 +167,16 @@ struct console {
+ 	short	flags;
+ 	short	index;
+ 	int	cflag;
++#ifdef CONFIG_PRINTK
++	char	sync_buf[CONSOLE_LOG_MAX];
++	struct latched_seq printk_seq;
++	struct latched_seq printk_sync_seq;
++#ifdef CONFIG_HAVE_NMI
++	struct latched_seq printk_sync_nmi_seq;
++#endif
++#endif /* CONFIG_PRINTK */
++
++	struct task_struct *thread;
+ 	uint	ispeed;
+ 	uint	ospeed;
+ 	void	*data;
